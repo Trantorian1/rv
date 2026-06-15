@@ -26,11 +26,15 @@
     },
 }
 : let
+  nixos = pkgs.nixos ./test/configuration.nix;
+
   modules = pkgs.lib.evalModules {
     modules = [
-      ({config, ...}: {config._module.args = {inherit pkgs rustRelease;};})
+      ({config, ...}: {config._module.args = {inherit pkgs nixos rustRelease;};})
       ./options.nix
       ./config.nix
+      ./test/iso.nix
+      ./test/test.nix
     ];
   };
 in {
