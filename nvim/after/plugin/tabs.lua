@@ -1,7 +1,9 @@
 -- First tab: empty (this is already open by default)
 
 -- Second tab: git diff with diffview
-require("diffview").open({})
+if vim.fn.isdirectory(".git") ~= 0 then
+	require("diffview").open({})
+end
 
 -- Third tab: terminal
 vim.cmd("tabnew")
