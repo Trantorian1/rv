@@ -88,7 +88,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- Fuzzy find all the symbols in your current document.
 		-- Symbols are things like variables, functions, types, etc.
-		vim.keymap.set("n", "gO", builtin.lsp_document_symbols, { buffer = buf, desc = "Open Document Symbols" })
+		vim.keymap.set("n", "gD", builtin.lsp_document_symbols, { buffer = buf, desc = "Open Document Symbols" })
+
+		-- Fuzzy find all the symbols in your current workspace.
+		--  Similar to document symbols, except searches over your entire project.
+		vim.keymap.set(
+			"n",
+			"gW",
+			builtin.lsp_dynamic_workspace_symbols,
+			{ buffer = buf, desc = "Open Workspace Symbols" }
+		)
+
+		-- Jump to the type of the word under your cursor.
+		--  Useful when you're not sure what type a variable is and you want to see
+		--  the definition of its *type*, not where it was *defined*.
+		vim.keymap.set("n", "grt", builtin.lsp_type_definitions, { buffer = buf, desc = "[G]oto [T]ype Definition" })
 
 		-- Fuzzy find all the symbols in your current workspace.
 		-- Similar to document symbols, except searches over your entire project.
