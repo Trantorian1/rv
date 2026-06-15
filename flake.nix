@@ -14,10 +14,12 @@
     in {
       packages = rec {
         rv = module.config.rv;
+        nvim = module.config.nvim;
         default = rv;
       };
       apps = rec {
         rv = flake-utils.lib.mkApp {drv = self.packages.${system}.rv;};
+        nvim = flake-utils.lib.mkApp {drv = self.packages.${system}.nvim;};
         default = rv;
       };
       devShells = rec {

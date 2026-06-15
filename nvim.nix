@@ -104,6 +104,11 @@ in {
       };
     };
   in {
+    shell = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.bash;
+    };
+
     plugins = lib.mkOption {
       type = lib.types.listOf typePlugin;
       default = [];
@@ -151,6 +156,8 @@ in {
     pluginDeps = map (plugin: plugin.runtimeDeps) config.plugins;
     runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps);
   in {
+    shell = pkgs.fish;
+
     nvim = (pkgs.neovim.override
       {
         configure = {
@@ -158,17 +165,20 @@ in {
             ''
               vim.opt.rtp:prepend "${nvimSrc}/nvim"
               vim.opt.rtp:prepend "${nvimSrc}/nvim/after"
+              vim.o.shell = "${lib.getExe config.shell}"
             ''
             + (builtins.readFile ./nvim/init.lua);
 
           packages.myPlugins.start = basePlugins ++ plugins;
         };
       }).overrideAttrs {
+      pname = "nvim";
+
       installPhase = ''
         runHook preInstall
 
         wrapProgram $out/bin/nvim \
-          --prefix PATH : ${lib.makeBinPath runtimeDeps}
+          --prefix PATH : ${lib.makeBinPath (runtimeDeps ++ [config.shell])}
 
         runHook postInstall
       '';
