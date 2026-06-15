@@ -1,13 +1,13 @@
 {
-  super ? import ./. {},
+  system ? builtins.currentSystem,
+  super ? import ./. {inherit system;},
   pkgs ? super.pkgs,
   ...
-}: {
-  shell = pkgs.mkShellNoCC {
-    packages = with pkgs; [
-      super.config.nvim
-      super.config.rv
-      npins
-    ];
-  };
+}:
+pkgs.mkShellNoCC {
+  packages = with pkgs; [
+    super.config.nvim
+    super.config.rv
+    npins
+  ];
 }

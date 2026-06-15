@@ -84,23 +84,23 @@
     taplo
     fixjson
   ];
-
-  typePlugin = lib.types.submodule {
-    options = {
-      package = lib.mkOption {
-        type = lib.types.package;
-      };
-      config = lib.mkOption {
-        type = lib.types.path;
-      };
-      runtimeDeps = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [];
+in {
+  options = let
+    typePlugin = lib.types.submodule {
+      options = {
+        package = lib.mkOption {
+          type = lib.types.package;
+        };
+        config = lib.mkOption {
+          type = lib.types.path;
+        };
+        runtimeDeps = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
+          default = [];
+        };
       };
     };
-  };
-in {
-  options = {
+  in {
     plugins = lib.mkOption {
       type = lib.types.listOf typePlugin;
       default = [];
