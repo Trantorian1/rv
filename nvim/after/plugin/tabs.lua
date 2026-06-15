@@ -8,11 +8,11 @@ end
 -- Third tab: terminal
 vim.cmd("tabnew")
 vim.cmd("term")
-vim.cmd("set nospell")
+vim.cmd("set relativenumber nospell")
 vim.cmd("file term1")
 vim.cmd("vspl")
 vim.cmd("term")
-vim.cmd("set nospell")
+vim.cmd("set relativenumber nospell")
 vim.cmd("file term2")
 
 -- Go back to first tab
