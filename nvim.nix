@@ -71,6 +71,9 @@
   ];
 
   baseDeps = with pkgs; [
+    git
+    dbus
+
     ripgrep
     fd
 
