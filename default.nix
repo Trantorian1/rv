@@ -14,7 +14,7 @@
     in
       toolchain.toolchain.channel
     else "1.96.0",
-  rust ?
+  rustRelease ?
     pkgs.rust-bin.stable.${rustVersion}.default.override {
       extensions = [
         "rust-src"
@@ -28,11 +28,11 @@
 : let
   modules = pkgs.lib.evalModules {
     modules = [
-      ({config, ...}: {config._module.args = {inherit pkgs;};})
+      ({config, ...}: {config._module.args = {inherit pkgs rustRelease;};})
       ./nvim.nix
     ];
   };
 in {
-  inherit pkgs rust;
+  inherit pkgs;
   inherit (modules) config;
 }
