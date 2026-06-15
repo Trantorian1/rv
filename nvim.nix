@@ -94,7 +94,7 @@
         type = lib.types.path;
       };
       runtimeDeps = lib.mkOption {
-        type = lib.listOf lib.types.package;
+        type = lib.types.listOf lib.types.package;
         default = [];
       };
     };
@@ -145,7 +145,8 @@ in {
       '';
     };
 
-    runtimeDeps = baseDeps ++ (lib.lists.foldr (a: b: a.runtimeDeps + b.runtimeDeps) [] config.plugins);
+    pluginDeps = map (plugin: plugin.runtimeDeps) config.plugins;
+    runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps);
   in {
     nvim = (pkgs.neovim.override
       {
