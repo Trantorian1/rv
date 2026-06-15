@@ -88,46 +88,6 @@
     fixjson
   ];
 in {
-  options = let
-    typePlugin = lib.types.submodule {
-      options = {
-        package = lib.mkOption {
-          type = lib.types.package;
-        };
-        config = lib.mkOption {
-          type = lib.types.path;
-        };
-        runtimeDeps = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [];
-        };
-      };
-    };
-  in {
-    shell = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.bash;
-    };
-
-    plugins = lib.mkOption {
-      type = lib.types.listOf typePlugin;
-      default = [];
-    };
-
-    fonts = lib.mkOption {
-      type = lib.types.listOf lib.types.package;
-      default = [];
-    };
-
-    nvim = lib.mkOption {
-      type = lib.types.package;
-    };
-
-    rv = lib.mkOption {
-      type = lib.types.package;
-    };
-  };
-
   config = let
     plugins = map (plugin: plugin.package) config.plugins;
 
@@ -153,25 +113,26 @@ in {
       '';
     };
 
+    nvimConfig = pkgs.neovim.override {
+      configure = {
+        customLuaRC =
+          ''
+            vim.opt.rtp:prepend "${nvimSrc}/nvim"
+            vim.opt.rtp:prepend "${nvimSrc}/nvim/after"
+            vim.o.shell = "${lib.getExe config.shell}"
+          ''
+          + (builtins.readFile ./nvim/init.lua);
+
+        packages.myPlugins.start = basePlugins ++ plugins;
+      };
+    };
+
     pluginDeps = map (plugin: plugin.runtimeDeps) config.plugins;
     runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps);
   in {
-    shell = pkgs.fish;
+    shell = lib.mkDefault pkgs.fish;
 
-    nvim = (pkgs.neovim.override
-      {
-        configure = {
-          customLuaRC =
-            ''
-              vim.opt.rtp:prepend "${nvimSrc}/nvim"
-              vim.opt.rtp:prepend "${nvimSrc}/nvim/after"
-              vim.o.shell = "${lib.getExe config.shell}"
-            ''
-            + (builtins.readFile ./nvim/init.lua);
-
-          packages.myPlugins.start = basePlugins ++ plugins;
-        };
-      }).overrideAttrs {
+    nvim = lib.mkDefault (nvimConfig.overrideAttrs {
       pname = "nvim";
 
       installPhase = ''
@@ -182,7 +143,7 @@ in {
 
         runHook postInstall
       '';
-    };
+    });
 
     rv = pkgs.stdenv.mkDerivation {
       pname = "rv";

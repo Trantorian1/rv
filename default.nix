@@ -29,7 +29,8 @@
   modules = pkgs.lib.evalModules {
     modules = [
       ({config, ...}: {config._module.args = {inherit pkgs rustRelease;};})
-      ./nvim.nix
+      ./options.nix
+      ./config.nix
     ];
   };
 in {
