@@ -30,6 +30,8 @@
           -cdrom ${config.iso}/iso/${config.iso.isoName} \
           -nographic
       '';
+
+      meta.description = "Isolated test environment for running rv";
     };
   };
 }

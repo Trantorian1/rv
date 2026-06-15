@@ -21,10 +21,19 @@
 
         default = rv;
       };
-      apps = rec {
-        rv = flake-utils.lib.mkApp {drv = self.packages.${system}.rv;};
-        nvim = flake-utils.lib.mkApp {drv = self.packages.${system}.nvim;};
-        vm = flake-utils.lib.mkApp {drv = self.packages.${system}.vm;};
+      apps = let
+        mkApp = drv: let
+          name = drv.pname or drv.name;
+          exePath = drv.passthru.exePath or "/bin/${name}";
+        in {
+          type = "app";
+          program = "${drv}${exePath}";
+          meta = drv.meta;
+        };
+      in rec {
+        rv = mkApp self.packages.${system}.rv;
+        nvim = mkApp self.packages.${system}.nvim;
+        vm = mkApp self.packages.${system}.vm;
 
         default = rv;
       };
