@@ -64,6 +64,7 @@
     which-key-nvim
     smart-splits-nvim
     no-neck-pain-nvim
+    dropbar-nvim
   ];
 
   baseFonts = with pkgs; [
