@@ -112,7 +112,9 @@
   ];
 in {
   config = let
-    plugins = map (plugin: plugin.package) config.plugins;
+    plugins =
+      builtins.filter (package: package != null)
+      (map (plugin: plugin.package) config.plugins);
 
     nvimSrc = pkgs.stdenv.mkDerivation {
       name = "nvim-src";

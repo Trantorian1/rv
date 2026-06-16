@@ -1,12 +1,9 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{lib, ...}: let
   typePlugin = lib.types.submodule {
     options = {
       package = lib.mkOption {
-        type = lib.types.package;
+        type = lib.types.nullOr lib.types.package;
+        default = null;
       };
       config = lib.mkOption {
         type = lib.types.path;
@@ -19,14 +16,13 @@
   };
 in {
   options = {
-    shell = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.bash;
-    };
-
     plugins = lib.mkOption {
       type = lib.types.listOf typePlugin;
       default = [];
+    };
+
+    shell = lib.mkOption {
+      type = lib.types.package;
     };
 
     fonts = lib.mkOption {

@@ -12,11 +12,11 @@
         formatter = super.pkgs.alejandra;
 
         packages = rec {
-          rv = super.config.rv;
-          nvim = super.config.nvim;
-          iso = super.config.iso;
-          vm = super.config.vm;
-          test = super.config.test;
+          rv = super.module.config.rv;
+          nvim = super.module.config.nvim;
+          iso = super.module.config.iso;
+          vm = super.module.config.vm;
+          test = super.module.config.test;
 
           default = rv;
         };

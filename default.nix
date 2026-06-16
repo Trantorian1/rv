@@ -27,7 +27,7 @@
 }: let
   nixos = pkgs.nixos ./test/configuration.nix;
 
-  modules = pkgs.lib.evalModules {
+  module = pkgs.lib.evalModules {
     modules = [
       ({config, ...}: {config._module.args = {inherit pkgs nixos rustRelease;};})
       ./options.nix
@@ -38,5 +38,5 @@
   };
 in {
   inherit pkgs;
-  inherit (modules) config;
+  inherit module;
 }

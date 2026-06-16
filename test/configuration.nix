@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  super = import ../. {inherit (pkgs.stdenv.hostPlatform) system;};
+  rv = import ../. {inherit (pkgs.stdenv.hostPlatform) system;};
 in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -19,7 +19,7 @@ in {
 
   services.getty.autologinUser = "alice";
 
-  environment.systemPackages = [super.config.nvim];
+  environment.systemPackages = [rv.module.config.nvim];
 
   system.stateVersion = "26.05";
 }
