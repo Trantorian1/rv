@@ -107,10 +107,7 @@ in {
         cp -r lua $out/nvim
         cp -r plugin $out/nvim
 
-        ${
-          lib.strings.concatLines
-          (map (plugin: "cp ${plugin.config} $out/nvim/plugin") config.plugins)
-        }
+        ${lib.strings.concatLines (map (plugin: "cp ${plugin.config} $out/nvim/plugin") config.plugins)}
       '';
     };
 
@@ -133,18 +130,20 @@ in {
   in {
     shell = lib.mkDefault pkgs.fish;
 
-    nvim = lib.mkDefault (nvimConfig.overrideAttrs {
-      pname = "nvim";
+    nvim = lib.mkDefault (
+      nvimConfig.overrideAttrs {
+        pname = "nvim";
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        wrapProgram $out/bin/nvim \
-          --prefix PATH : ${lib.makeBinPath (runtimeDeps ++ [config.shell])}
+          wrapProgram $out/bin/nvim \
+            --prefix PATH : ${lib.makeBinPath (runtimeDeps ++ [config.shell])}
 
-        runHook postInstall
-      '';
-    });
+          runHook postInstall
+        '';
+      }
+    );
 
     rv = pkgs.stdenv.mkDerivation {
       pname = "rv";

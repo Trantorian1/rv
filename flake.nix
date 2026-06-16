@@ -4,33 +4,37 @@
   outputs = {self, ...}: let
     util = import ./lib/util.nix {};
   in
-    util.eachDefaultSystem (system: let
-      super = import ./. {inherit system;};
-      shell = import ./shell.nix {inherit system;};
-    in {
-      packages = rec {
-        rv = super.config.rv;
-        nvim = super.config.nvim;
-        iso = super.config.iso;
-        vm = super.config.vm;
-        test = super.config.test;
+    util.eachDefaultSystem (
+      system: let
+        super = import ./. {inherit system;};
+        shell = import ./shell.nix {inherit system;};
+      in {
+        formatter = super.pkgs.alejandra;
 
-        default = rv;
-      };
-      apps = rec {
-        rv = util.mkApp self.packages.${system}.rv;
-        nvim = util.mkApp self.packages.${system}.nvim;
-        vm = util.mkApp self.packages.${system}.vm;
+        packages = rec {
+          rv = super.config.rv;
+          nvim = super.config.nvim;
+          iso = super.config.iso;
+          vm = super.config.vm;
+          test = super.config.test;
 
-        default = rv;
-      };
-      checks = {
-        nvim = self.packages.${system}.test;
-      };
-      devShells = rec {
-        rv = shell;
+          default = rv;
+        };
+        apps = rec {
+          rv = util.mkApp self.packages.${system}.rv;
+          nvim = util.mkApp self.packages.${system}.nvim;
+          vm = util.mkApp self.packages.${system}.vm;
 
-        default = rv;
-      };
-    });
+          default = rv;
+        };
+        checks = {
+          nvim = self.packages.${system}.test;
+        };
+        devShells = rec {
+          rv = shell;
+
+          default = rv;
+        };
+      }
+    );
 }

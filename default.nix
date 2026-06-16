@@ -24,8 +24,7 @@
         "wasm32-unknown-unknown"
       ];
     },
-}
-: let
+}: let
   nixos = pkgs.nixos ./test/configuration.nix;
 
   modules = pkgs.lib.evalModules {
