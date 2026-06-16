@@ -39,7 +39,7 @@ You can extend `rv` with new plugins and configuration options using the [nix mo
 
 ### Plugins
 
-> *A simple example which adds* [lazygit]  to `rv`.
+> *A simple example which adds* [lazygit] _to `rv`_.
 
 ```nix
 # examples/lazygit.nix
@@ -182,6 +182,6 @@ nix flake check
 [ `options.nix` ]: ./options.nix
 [ `config.nix` ]:  ./config.nix
 [ neovide ]:  https://github.com/neovide/neovide
-[ `lazygit` ]:  https://github.com/jesseduffield/lazygit
+[ lazygit ]:  https://github.com/jesseduffield/lazygit
 [kickstart.nvim]: https://github.com/nix-community/kickstart-nix.nvim
 [kickstart-nix.nvim]: https://github.com/nix-community/kickstart-nix.nvim
