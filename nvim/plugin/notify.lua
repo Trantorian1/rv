@@ -7,6 +7,7 @@ local notify = require("notify")
 
 notify.setup({
 	timeout = 2000,
+	level = vim.log.levels.ERROR,
 
 	max_width = function()
 		if vim.bo.filetype == "TelescopePrompt" then
