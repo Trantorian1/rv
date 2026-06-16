@@ -1,14 +1,10 @@
 {
   description = "Graphical neovim configuration for Rust development";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-
-  outputs = {
-    self,
-    flake-utils,
-    ...
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
+  outputs = {self, ...}: let
+    util = import ./lib/util.nix {};
+  in
+    util.eachDefaultSystem (system: let
       super = import ./. {inherit system;};
       shell = import ./shell.nix {inherit system;};
     in {
@@ -21,19 +17,10 @@
 
         default = rv;
       };
-      apps = let
-        mkApp = drv: let
-          name = drv.pname or drv.name;
-          exePath = drv.passthru.exePath or "/bin/${name}";
-        in {
-          type = "app";
-          program = "${drv}${exePath}";
-          meta = drv.meta;
-        };
-      in rec {
-        rv = mkApp self.packages.${system}.rv;
-        nvim = mkApp self.packages.${system}.nvim;
-        vm = mkApp self.packages.${system}.vm;
+      apps = rec {
+        rv = util.mkApp self.packages.${system}.rv;
+        nvim = util.mkApp self.packages.${system}.nvim;
+        vm = util.mkApp self.packages.${system}.vm;
 
         default = rv;
       };
