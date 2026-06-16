@@ -86,6 +86,8 @@ nix-build examples/lazygit.nix -A module.config.rv && ./result/bin/rv
 
 You can check this by calling the `:Lazygit` command.
 
+---
+
 ###  Shell
 
 > *Sets the default shell to* `bash`.
@@ -114,6 +116,8 @@ Then run:
 ```bash
 nix-build examples/bash.nix -A module.config.rv && ./result/bin/rv
 ```
+
+---
 
 ### Fonts
 
