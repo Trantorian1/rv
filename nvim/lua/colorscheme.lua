@@ -34,6 +34,7 @@ require("catppuccin").setup({
 		which_key = true,
 		dap = true,
 		dap_ui = true,
+		notify = true,
 	},
 })
 vim.cmd.colorscheme("catppuccin-latte")

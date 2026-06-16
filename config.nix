@@ -6,6 +6,7 @@
   ...
 }: let
   basePlugins = with pkgs.vimPlugins; [
+    # Common deps
     plenary-nvim
     nvim-web-devicons
     nui-nvim
@@ -24,31 +25,43 @@
         ]
     ))
 
+    # Search
     telescope-nvim
     telescope-ui-select-nvim
     telescope-fzf-native-nvim
 
+    # git
     git-blame-nvim
     diffview-nvim
     gitsigns-nvim
     oil-git-nvim
 
+    #  lsp
     fidget-nvim
     nvim-lspconfig
     rustaceanvim
 
+    # debug
+    nvim-dap
+    nvim-dap-ui
+    nvim-dap-virtual-text
+
+    # edit
     oil-nvim
     nvim-autopairs
     blink-cmp
     luasnip
     conform-nvim
-    todo-comments-nvim
     comment-nvim
     flash-nvim
     vim-visual-multi
     neogen
     nvim-treesitter-context
+    precognition-nvim
 
+    # visual
+    nvim-notify
+    todo-comments-nvim
     catppuccin-nvim
     auto-dark-mode-nvim
     bufferline-nvim
@@ -57,7 +70,6 @@
     lualine-nvim
     render-markdown-nvim
     noice-nvim
-    precognition-nvim
     rainbow-delimiters-nvim
     nvim-scrollbar
     edgy-nvim
@@ -72,20 +84,30 @@
   ];
 
   baseDeps = with pkgs; [
+    # common
     git
     dbus
+    gcc
 
+    # search
     ripgrep
     fd
 
+    # lua
     lua-language-server
     stylua
 
+    # nix
     nil
     alejandra
 
+    # rust
     rustRelease
+    graphviz
     taplo
+    vscode-extensions.vadimcn.vscode-lldb.adapter
+
+    # json
     fixjson
   ];
 in {

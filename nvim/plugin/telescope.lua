@@ -44,6 +44,7 @@ require("telescope").setup({
 -- Enable Telescope extensions if they are installed
 pcall(require("telescope").load_extension, "fzf")
 pcall(require("telescope").load_extension, "ui-select")
+pcall(require("telescope").load_extension, "notify")
 
 -- See `:help telescope.builtin`
 local builtin = require("telescope.builtin")
@@ -57,6 +58,10 @@ vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iag
 vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+-- See `:help telescope.extensions`
+local extensions = require("telescope").extensions
+vim.keymap.set("n", "<leader>ln", extensions.notify.notify, { desc = "[L]ist [N]otifications" })
 
 -- Slightly advanced example of overriding default behavior and theme
 vim.keymap.set("n", "<leader>/", function()
