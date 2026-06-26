@@ -2,7 +2,7 @@
   config,
   pkgs,
   lib,
-  rustRelease,
+  rust,
   ...
 }: let
   basePlugins = with pkgs.vimPlugins; [
@@ -13,16 +13,15 @@
     snacks-nvim
 
     (nvim-treesitter.withPlugins (
-      plugins:
-        with plugins; [
-          nix
-          lua
-          rust
-          json
-          yaml
-          toml
-          c
-        ]
+      plugins: [
+        plugins.nix
+        plugins.lua
+        plugins.rust
+        plugins.json
+        plugins.yaml
+        plugins.toml
+        plugins.c
+      ]
     ))
 
     # Search
@@ -102,7 +101,7 @@
     alejandra
 
     # rust
-    rustRelease
+    rust
     graphviz
     taplo
     vscode-extensions.vadimcn.vscode-lldb.adapter

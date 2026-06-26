@@ -1,10 +1,8 @@
 {
-  pkgs,
   lib,
+  nvim,
   ...
-}: let
-  rv = import ../. {inherit (pkgs.stdenv.hostPlatform) system;};
-in {
+}: {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = lib.mkForce 5;
@@ -19,7 +17,7 @@ in {
 
   services.getty.autologinUser = "alice";
 
-  environment.systemPackages = [rv.module.config.nvim];
+  environment.systemPackages = [nvim];
 
   system.stateVersion = "26.05";
 }
