@@ -18,8 +18,7 @@
     },
     "root": {
       "inputs": {
-        "rv": "rv",
-        "util": "util_2"
+        "rv": "rv"
       }
     },
     "rust-overlay": {
@@ -71,17 +70,6 @@
       "parent": [
         "rv"
       ]
-    },
-    "util_2": {
-      "locked": {
-        "path": "../../lib",
-        "type": "path"
-      },
-      "original": {
-        "path": "../../lib",
-        "type": "path"
-      },
-      "parent": []
     }
   },
   "root": "root",

@@ -1,5 +1,5 @@
 {
-  outputs = {...}: rec {
+  outputs = {self, ...}: rec {
     defaultSystems = [
       "aarch64-linux"
       "aarch64-darwin"
@@ -28,6 +28,8 @@
             }
         )
         attrs (builtins.attrNames ret)
+        # Boostrap utils into the final attrset
+        // {util = self;}
     );
 
     # Applies a merge operation accross systems.

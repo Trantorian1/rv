@@ -1,14 +1,12 @@
 {
   inputs.rv.url = ../../.;
-  inputs.util.url = ../../lib;
 
   outputs = {
     self,
     rv,
-    util,
     ...
   }:
-    util.eachDefaultSystem (system: let
+    rv.util.eachDefaultSystem (system: let
       pkgs = rv.packages.${system}.pkgs;
       module = rv.nixosModules.${system}.rv.extendModules {
         modules = [
@@ -20,6 +18,6 @@
     in {
       nixosModules.default = module;
       packages.default = self.nixosModules.${system}.default.config.rv;
-      apps.default = util.mkApp self.packages.${system}.default;
+      apps.default = rv.util.mkApp self.packages.${system}.default;
     });
 }
