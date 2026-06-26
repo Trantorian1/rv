@@ -77,9 +77,10 @@
 
         devShells = rec {
           rv = pkgs.mkShellNoCC {
-            packages = [
+            packages = with pkgs; [
               self.packages.${system}.nvim
               self.packages.${system}.rv
+              nurl
             ];
           };
 

@@ -5,6 +5,16 @@
   rust,
   ...
 }: let
+  deadcolumn = pkgs.vimUtils.buildVimPlugin {
+    name = "deadcolumn-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "Bekaboo";
+      repo = "deadcolumn.nvim";
+      tag = "v1.0.2";
+      hash = "sha256-/EtRvosijeVAMa7vQhcrFRkOs+gslDUHmbvbIGTjqr8=";
+    };
+  };
+
   basePlugins = with pkgs.vimPlugins; [
     # Common deps
     plenary-nvim
@@ -76,6 +86,7 @@
     smart-splits-nvim
     no-neck-pain-nvim
     dropbar-nvim
+    deadcolumn
   ];
 
   baseFonts = with pkgs; [
