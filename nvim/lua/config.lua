@@ -56,6 +56,9 @@ vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.expandtab = true
 
+-- Configure color columns
+vim.o.colorcolumn = "80,100,120"
+
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
