@@ -47,23 +47,34 @@
       in {
         formatter = pkgs.alejandra;
 
-        packages = rec {
-          rv = module.config.rv;
-          nvim = module.config.nvim;
+        nixosModules = rec {
+          rv = module;
 
           default = rv;
         };
+
+        packages = rec {
+          inherit pkgs rust;
+
+          rv = self.nixosModules.${system}.rv.config.rv;
+          nvim = self.nixosModules.${system}.rv.config.nvim;
+
+          default = rv;
+        };
+
         apps = rec {
           rv = util.mkApp self.packages.${system}.rv;
           nvim = util.mkApp self.packages.${system}.nvim;
 
           default = rv;
         };
+
         checks = {
           nvim = pkgs.callPackage ./test/nvim.nix {
             nvim = self.packages.${system}.nvim;
           };
         };
+
         devShells = rec {
           rv = pkgs.mkShellNoCC {
             packages = [
