@@ -128,7 +128,7 @@ in {
 
     nvimSrc = pkgs.stdenv.mkDerivation {
       name = "nvim-src";
-      src = ./nvim;
+      src = ../nvim;
 
       buildPhase = ''
         mkdir -p $out/nvim/plugin
@@ -153,7 +153,7 @@ in {
             vim.opt.rtp:prepend "${nvimSrc}/nvim/after"
             vim.o.shell = "${lib.getExe config.shell}"
           ''
-          + (builtins.readFile ./nvim/init.lua);
+          + (builtins.readFile ../nvim/init.lua);
 
         packages.myPlugins.start = basePlugins ++ plugins;
       };

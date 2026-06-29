@@ -1,91 +1,53 @@
 {
   description = "Graphical neovim configuration for Rust development";
 
-  inputs.nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
-  inputs.rust-overlay = {
-    url = "github:oxalica/rust-overlay";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-  inputs.util.url = ./lib;
+  inputs = {
+    nixpkgs = {
+      url = "github:NixOs/nixpkgs/nixos-26.05";
+    };
 
-  outputs = {
-    self,
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+    };
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs @ {
     nixpkgs,
+    flake-parts,
     rust-overlay,
-    util,
     ...
   }:
-    util.eachDefaultSystem (
-      system: let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [rust-overlay.overlays.default];
-        };
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
 
-        rustVersion =
-          if builtins.pathExists ./rust-toolchain.toml
-          then (pkgs.lib.trivial.importToml ./rust-toolchain.toml).toolchain.channel
-          else "1.96.0";
+      imports = [
+        flake-parts.flakeModules.modules
+        ./module
+        ./test
+        ./lib
+        ./overlay.nix
+        ./rv.nix
+      ];
 
-        rust = pkgs.rust-bin.stable.${rustVersion}.default.override {
-          extensions = [
-            "rust-src"
-            "rust-analyzer"
-          ];
-          targets = [
-            "wasm32-unknown-unknown"
-          ];
-        };
+      flake.modules.flake.default = ./module;
 
-        module = pkgs.lib.evalModules {
-          specialArgs = {inherit pkgs rust;};
-          modules = [
-            ./options.nix
-            ./config.nix
+      perSystem = {
+        self',
+        pkgs,
+        ...
+      }: {
+        devShells.default = pkgs.mkShellNoCC {
+          packages = with pkgs; [
+            self'.packages.nvim
+            self'.packages.rv
+            nurl
           ];
         };
-      in {
-        formatter = pkgs.alejandra;
-
-        nixosModules = rec {
-          rv = module;
-
-          default = rv;
-        };
-
-        packages = rec {
-          inherit pkgs rust;
-
-          rv = self.nixosModules.${system}.rv.config.rv;
-          nvim = self.nixosModules.${system}.rv.config.nvim;
-
-          default = rv;
-        };
-
-        apps = rec {
-          rv = util.mkApp self.packages.${system}.rv;
-          nvim = util.mkApp self.packages.${system}.nvim;
-
-          default = rv;
-        };
-
-        checks = {
-          nvim = pkgs.callPackage ./test/nvim.nix {
-            nvim = self.packages.${system}.nvim;
-          };
-        };
-
-        devShells = rec {
-          rv = pkgs.mkShellNoCC {
-            packages = with pkgs; [
-              self.packages.${system}.nvim
-              self.packages.${system}.rv
-              nurl
-            ];
-          };
-
-          default = rv;
-        };
-      }
-    );
+      };
+    };
 }
