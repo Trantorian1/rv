@@ -9,16 +9,16 @@
     formatter = pkgs.alejandra;
 
     packages = rec {
-      inherit (config) nvim rv;
+      inherit (config.rv) nvim editor;
 
-      default = rv;
+      default = editor;
     };
 
     apps = rec {
       nvim = self.lib.mkApp self'.packages.nvim;
-      rv = self.lib.mkApp self'.packages.rv;
+      editor = self.lib.mkApp self'.packages.editor;
 
-      default = rv;
+      default = editor;
     };
   };
 }

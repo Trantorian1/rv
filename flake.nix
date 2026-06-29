@@ -9,17 +9,11 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
-
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs @ {
     nixpkgs,
     flake-parts,
-    rust-overlay,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -30,7 +24,6 @@
         ./module
         ./test
         ./lib
-        ./overlay.nix
         ./rv.nix
       ];
 

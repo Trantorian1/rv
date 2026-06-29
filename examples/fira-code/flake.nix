@@ -1,37 +1,44 @@
 {
-  inputs.rv.url = ../../.;
+  inputs = {
+    nixpkgs = {
+      url = "github:NixOs/nixpkgs/nixos-26.05";
+    };
 
-  outputs = {
-    self,
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+    };
+
+    rv = {
+      url = ../../.;
+    };
+  };
+
+  outputs = inputs @ {
+    flake-parts,
     rv,
     ...
   }:
-    rv.util.eachDefaultSystem (system: let
-      pkgs = rv.packages.${system}.pkgs;
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      # `rv` configuration options are exposed as a default flake module which you need to import
+      imports = [rv.modules.flake.default];
+      systems = ["x86_64-linux"];
 
-      # rv configuration options are exposed in the root flake as `nixosModules`: you can use
-      # `extendModules` to customize this with your own behavior.
-      module = rv.nixosModules.${system}.rv.extendModules {
-        modules = [
-          {
-            # Adds new plugins to the config. A plugin consists of a config file and optionally
-            # a vim package as well as a list of runtime dependencies.
-            config.plugins = [
-              {
-                # You can set just the config file if all you want to do is add some custom lua to
-                # your neovim configuration.
-                config = ./fira-code.lua;
-              }
-            ];
+      perSystem = {
+        self',
+        pkgs,
+        config,
+        ...
+      }: {
+        # `rv` configuration options are available under `config.rv`, which we set here, adding some
+        # additional lua logic and importing a custom font
+        rv.plugins = [{config = ./fira-code.lua;}];
+        rv.fonts = [pkgs.nerd-fonts.fira-code];
 
-            # List of gui fonts to be used at runtime by neovide
-            config.fonts = with pkgs; [nerd-fonts.fira-code];
-          }
-        ];
+        # `rv` exposes several configuration options, each defined in `module/options.nix`, but the
+        # most important for your purpose are `nvim` and `editor` which contain its terminal and
+        # graphical-based capabilities
+        packages.default = config.rv.editor;
+        apps.default = rv.lib.mkApp self'.packages.default;
       };
-    in {
-      nixosModules.default = module;
-      packages.default = self.nixosModules.${system}.default.config.rv;
-      apps.deefault = rv.util.mkApp self.packages.${system}.default;
-    });
+    };
 }

@@ -121,10 +121,10 @@
     fixjson
   ];
 in {
-  config = let
+  config.rv = let
     plugins =
       builtins.filter (package: package != null)
-      (map (plugin: plugin.package) config.plugins);
+      (map (plugin: plugin.package) config.rv.plugins);
 
     nvimSrc = pkgs.stdenv.mkDerivation {
       name = "nvim-src";
@@ -141,7 +141,7 @@ in {
         cp -r lua $out/nvim
         cp -r plugin $out/nvim
 
-        ${lib.strings.concatLines (map (plugin: "cp ${plugin.config} $out/nvim/plugin") config.plugins)}
+        ${lib.strings.concatLines (map (plugin: "cp ${plugin.config} $out/nvim/plugin") config.rv.plugins)}
       '';
     };
 
@@ -151,7 +151,7 @@ in {
           ''
             vim.opt.rtp:prepend "${nvimSrc}/nvim"
             vim.opt.rtp:prepend "${nvimSrc}/nvim/after"
-            vim.o.shell = "${lib.getExe config.shell}"
+            vim.o.shell = "${lib.getExe config.rv.shell}"
           ''
           + (builtins.readFile ../nvim/init.lua);
 
@@ -159,11 +159,9 @@ in {
       };
     };
 
-    pluginDeps = map (plugin: plugin.runtimeDeps) config.plugins;
+    pluginDeps = map (plugin: plugin.runtimeDeps) config.rv.plugins;
     runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps);
   in {
-    shell = lib.mkDefault pkgs.fish;
-
     nvim = lib.mkDefault (
       nvimConfig.overrideAttrs {
         pname = "nvim";
@@ -172,14 +170,14 @@ in {
           runHook preInstall
 
           wrapProgram $out/bin/nvim \
-            --prefix PATH : ${lib.makeBinPath (runtimeDeps ++ [config.shell])}
+            --prefix PATH : ${lib.makeBinPath (runtimeDeps ++ [config.rv.shell])}
 
           runHook postInstall
         '';
       }
     );
 
-    rv = pkgs.stdenv.mkDerivation {
+    editor = pkgs.stdenv.mkDerivation {
       pname = "rv";
       version = "0.0.1";
 
@@ -195,8 +193,8 @@ in {
         mkdir -p $out/bin
         cp bin/neovide $out/bin/rv
         wrapProgram $out/bin/rv \
-          --add-flag --neovim-bin=${config.nvim}/bin/nvim \
-          --prefix XDG_DATA_DIRS : ${lib.makeSearchPath "share" (baseFonts ++ config.fonts)}
+          --add-flag --neovim-bin=${config.rv.nvim}/bin/nvim \
+          --prefix XDG_DATA_DIRS : ${lib.makeSearchPath "share" (baseFonts ++ config.rv.fonts)}
 
         runHook postInstall
       '';

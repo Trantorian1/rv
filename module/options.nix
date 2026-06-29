@@ -1,4 +1,8 @@
-{lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   typePlugin = lib.types.submodule {
     options = {
       package = lib.mkOption {
@@ -15,14 +19,20 @@
     };
   };
 in {
-  options = {
+  options.rv = {
     plugins = lib.mkOption {
       type = lib.types.listOf typePlugin;
       default = [];
     };
 
+    rustVersion = lib.mkOption {
+      type = lib.types.str;
+      default = "1.96.0";
+    };
+
     shell = lib.mkOption {
       type = lib.types.package;
+      default = pkgs.fish;
     };
 
     fonts = lib.mkOption {
@@ -34,7 +44,7 @@ in {
       type = lib.types.package;
     };
 
-    rv = lib.mkOption {
+    editor = lib.mkOption {
       type = lib.types.package;
     };
   };
