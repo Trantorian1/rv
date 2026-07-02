@@ -1,6 +1,6 @@
 {
+  config,
   lib,
-  nvim,
   ...
 }: {
   boot.loader.systemd-boot.enable = true;
@@ -17,7 +17,7 @@
 
   services.getty.autologinUser = "alice";
 
-  environment.systemPackages = [nvim];
+  environment.systemPackages = [config.rv.nvim];
 
   system.stateVersion = "26.05";
 }

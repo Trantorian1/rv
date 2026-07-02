@@ -1,13 +1,10 @@
-{
-  self,
-  withSystem,
-  ...
-}: {
-  flake.nixosModules.forTesting = withSystem "x86_64-linux" ({config, ...}: {
-    _module.args = {inherit (config.packages) nvim;};
-
-    imports = [./configuration.nix];
-  });
+{self, ...}: {
+  flake.nixosModules.forTesting = {
+    imports = [
+      ./configuration.nix
+      self.nixosModules.default
+    ];
+  };
 
   perSystem = {
     pkgs,

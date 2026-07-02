@@ -3,8 +3,8 @@
 
   perSystem = {...}: {
     imports = [
-      ./options.nix
-      ./config.nix
+      ../options.nix
+      ../config.nix
     ];
   };
 }
