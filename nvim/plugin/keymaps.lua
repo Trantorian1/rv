@@ -54,3 +54,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
+
+-- Common settings every time a new terminal is opened
+vim.api.nvim_create_autocmd("TermOpen", {
+	callback = function()
+		vim.opt_local.relativenumber = true
+		vim.opt_local.spell = false
+	end,
+})
