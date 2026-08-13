@@ -9,7 +9,7 @@
     };
 
     rv = {
-      url = "path:../../.";
+      url = "github:trantorian1/rv";
     };
   };
 
