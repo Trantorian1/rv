@@ -4,19 +4,16 @@
     config,
     ...
   }: let
+    rust_overlay = import ../rust-overlay.nix;
+
     nixpkgs = import inputs.nixpkgs {
       inherit system;
-      overlays = [(import ../rust-overlay.nix)];
+      overlays = [rust_overlay.overlay];
     };
 
-    rust = nixpkgs.rust-bin.stable.${config.rv.rustVersion}.default.override {
-      extensions = [
-        "rust-src"
-        "rust-analyzer"
-      ];
-      targets = [
-        "wasm32-unknown-unknown"
-      ];
+    rust = rust_overlay.makeRustVersion {
+      inherit (config.rv) rustVersion;
+      inherit nixpkgs;
     };
   in {
     _module.args.rust = rust;

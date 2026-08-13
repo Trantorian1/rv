@@ -3,15 +3,14 @@
   pkgs,
   ...
 }: let
-  nixpkgs = pkgs.extend (import ../rust-overlay.nix);
-in {
-  _module.args.rust = nixpkgs.rust-bin.stable.${config.rv.rustVersion}.default.override {
-    extensions = [
-      "rust-src"
-      "rust-analyzer"
-    ];
-    targets = [
-      "wasm32-unknown-unknown"
-    ];
+  rust_overlay = import ../rust-overlay.nix;
+
+  nixpkgs = pkgs.extend rust_overlay.overlay;
+
+  rust = rust_overlay.makeRustVersion {
+    inherit (config.rv) rustVersion;
+    inherit nixpkgs;
   };
+in {
+  _module.args.rust = rust;
 }
