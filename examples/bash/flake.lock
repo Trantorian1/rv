@@ -111,14 +111,18 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "path": "../..",
-        "type": "path"
+        "lastModified": 1786617881,
+        "narHash": "sha256-7ggI0L8kJo5UMRMzPC6SzaXFqXjYed2qcN+/rrYa8bo=",
+        "owner": "trantorian1",
+        "repo": "rv",
+        "rev": "cfe616f287066a18b570e31fc931b56d269b8d34",
+        "type": "github"
       },
       "original": {
-        "path": "../..",
-        "type": "path"
-      },
-      "parent": []
+        "owner": "trantorian1",
+        "repo": "rv",
+        "type": "github"
+      }
     }
   },
   "root": "root",
