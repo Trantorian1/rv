@@ -5,16 +5,17 @@
 }: let
   typePlugin = lib.types.submodule {
     options = {
+      runtimeDeps = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+      };
+
       package = lib.mkOption {
         type = lib.types.nullOr lib.types.package;
         default = null;
       };
       config = lib.mkOption {
         type = lib.types.path;
-      };
-      runtimeDeps = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [];
       };
     };
   };
@@ -28,6 +29,11 @@ in {
     rustVersion = lib.mkOption {
       type = lib.types.str;
       default = "1.96.0";
+    };
+
+    runtimeDeps = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [];
     };
 
     shell = lib.mkOption {

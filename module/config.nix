@@ -160,7 +160,7 @@ in {
     };
 
     pluginDeps = map (plugin: plugin.runtimeDeps) config.rv.plugins;
-    runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps);
+    runtimeDeps = baseDeps ++ (lib.lists.flatten pluginDeps) ++ config.rv.runtimeDeps;
   in {
     nvim = lib.mkDefault (
       nvimConfig.overrideAttrs {
