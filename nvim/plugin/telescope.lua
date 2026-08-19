@@ -45,6 +45,7 @@ require("telescope").setup({
 pcall(require("telescope").load_extension, "fzf")
 pcall(require("telescope").load_extension, "ui-select")
 pcall(require("telescope").load_extension, "notify")
+pcall(require("telescope").load_extension, "dap")
 
 -- See `:help telescope.builtin`
 local builtin = require("telescope.builtin")
@@ -62,6 +63,7 @@ vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find exis
 -- See `:help telescope.extensions`
 local extensions = require("telescope").extensions
 vim.keymap.set("n", "<leader>ln", extensions.notify.notify, { desc = "[L]ist [N]otifications" })
+vim.keymap.set("n", "<leader>lb", extensions.dap.list_breakpoints, { desc = "[L]ist [B]reakpoints" })
 
 -- Slightly advanced example of overriding default behavior and theme
 vim.keymap.set("n", "<leader>/", function()

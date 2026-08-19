@@ -36,6 +36,7 @@
 
     # Search
     telescope-nvim
+    telescope-dap-nvim
     telescope-ui-select-nvim
     telescope-fzf-native-nvim
 
