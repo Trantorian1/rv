@@ -20,7 +20,7 @@
       systems = ["x86_64-linux"];
 
       imports = [
-        ./module/flake
+        ./module/flake.nix
         ./test
         ./lib
         ./rv.nix
@@ -28,8 +28,8 @@
         flake-parts.flakeModules.modules
       ];
 
-      flake.modules.flake.default = ./module/flake;
-      flake.nixosModules.default = ./module/nixos;
+      flake.modules.flake.default = ./module/flake.nix;
+      flake.nixosModules.default = ./module/nixos.nix;
 
       perSystem = {
         self',

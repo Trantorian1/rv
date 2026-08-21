@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  rust,
   ...
 }: let
   deadcolumn = pkgs.vimUtils.buildVimPlugin {
@@ -113,7 +112,6 @@
     alejandra
 
     # rust
-    rust
     graphviz
     taplo
     vscode-extensions.vadimcn.vscode-lldb.adapter
