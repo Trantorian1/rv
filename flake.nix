@@ -38,8 +38,6 @@
       }: {
         devShells.default = pkgs.mkShellNoCC {
           packages = with pkgs; [
-            self'.packages.nvim
-            self'.packages.editor
             nurl
           ];
         };
