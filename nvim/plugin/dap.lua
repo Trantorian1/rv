@@ -5,6 +5,7 @@ vim.g.did_load_dap = true
 
 local dap = require("dap")
 local dapui = require("dapui")
+local dap_virtual_text = require("nvim-dap-virtual-text")
 
 dapui.setup({
 	controls = {
@@ -41,7 +42,7 @@ dapui.setup({
 	},
 })
 
-require("nvim-dap-virtual-text").setup({})
+dap_virtual_text.setup({})
 
 -- Change breakpoint icons
 local breakpoint_icons = {
@@ -87,6 +88,7 @@ vim.keymap.set("n", "<F6>", function()
 	dap.disconnect()
 	dap.close()
 	dapui.close()
+	dap_virtual_text.refresh()
 end, { desc = "Debugger: end session" })
 
 vim.keymap.set("n", "<leader>b", function()
