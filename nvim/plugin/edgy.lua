@@ -22,12 +22,6 @@ require("edgy").setup({
 				return vim.bo[buf].buftype == "help"
 			end,
 		},
-		{
-			ft = "neotest-summary",
-			pinned = true,
-			collapsed = true,
-			open = "Neotest summary",
-		},
 	},
 
 	bottom = {

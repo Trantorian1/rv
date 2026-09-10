@@ -28,7 +28,6 @@ require("catppuccin").setup({
 		fidget = true,
 		flash = true,
 		gitsigns = true,
-		neotest = true,
 		noice = true,
 		render_markdown = true,
 		which_key = true,
