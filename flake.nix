@@ -5,7 +5,6 @@
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-parts.inputs.nixpkgs.follows = "nixpkgs";
 
     opencode-sandbox.url = "github:trantorian1/opencode-sandbox";
     opencode-sandbox.inputs.nixpkgs.follows = "nixpkgs";
