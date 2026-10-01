@@ -29,6 +29,7 @@
         plugins.json
         plugins.yaml
         plugins.toml
+        plugins.bash
         plugins.c
       ]
     ))
