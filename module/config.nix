@@ -45,7 +45,7 @@
     gitsigns-nvim
     oil-git-nvim
 
-    #  lsp
+    # lsp
     fidget-nvim
     nvim-lspconfig
     rustaceanvim
@@ -118,6 +118,7 @@
 
     # json
     fixjson
+    vscode-json-languageserver
   ];
 in {
   config.rv = let
