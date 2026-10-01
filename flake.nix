@@ -2,18 +2,19 @@
   description = "Graphical neovim configuration for Rust development";
 
   inputs = {
-    nixpkgs = {
-      url = "github:NixOs/nixpkgs/nixos-26.05";
-    };
+    nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
 
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs.follows = "nixpkgs";
+
+    opencode-sandbox.url = "github:trantorian1/opencode-sandbox";
+    opencode-sandbox.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
     nixpkgs,
     flake-parts,
+    opencode-sandbox,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -34,12 +35,35 @@
       perSystem = {
         self',
         pkgs,
+        system,
         ...
       }: {
+        packages = {
+          sandbox = opencode-sandbox.packages.${system}.sandbox.override {
+            opencode-sandbox = {
+              forwardPorts = [8888];
+              extraEnv = with pkgs; [
+                # nix
+                nixd
+                alejandra
+
+                # lua
+                lua-language-server
+                stylua
+              ];
+            };
+          };
+
+          devenv = pkgs.buildEnv {
+            name = "devenv";
+            paths = with pkgs; [
+              nurl
+            ];
+          };
+        };
+
         devShells.default = pkgs.mkShellNoCC {
-          packages = with pkgs; [
-            nurl
-          ];
+          packages = [self'.packages.devenv];
         };
       };
     };
