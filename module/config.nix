@@ -120,6 +120,10 @@
     # json
     fixjson
     vscode-json-languageserver
+
+    # yaml
+    yamlfmt
+    yaml-language-server
   ];
 in {
   config.rv = let

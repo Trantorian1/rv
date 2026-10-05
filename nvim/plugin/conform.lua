@@ -25,5 +25,6 @@ require("conform").setup({
 		json = { "fixjson" },
 		toml = { "taplo" },
 		nix = { "alejandra" },
+		yaml = { "yamlfmt" },
 	},
 })
