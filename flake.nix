@@ -3,11 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
-
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    opencode-sandbox.url = "github:trantorian1/opencode-sandbox";
-    opencode-sandbox.inputs.nixpkgs.follows = "nixpkgs";
+    opencode-sandbox.url = "github:OpencodeSandbox/opencode-sandbox?ref=feat/opencodev2";
   };
 
   outputs = inputs @ {
@@ -40,24 +38,31 @@
         packages = {
           sandbox = opencode-sandbox.packages.${system}.sandbox.override {
             opencode-sandbox = {
+              git.remote.url = "https://github.com/Trantorian1/rv.git";
+              git.shutdown.pushOnExit = false;
+              git.withLocalChanges = true;
+
+              opencode.config.mountHomeConfig = true;
               forwardPorts = [8888];
-              extraEnv = with pkgs; [
+
+              env.extend = with pkgs; [
                 # nix
-                nixd
+                nil
                 alejandra
 
                 # lua
                 lua-language-server
                 stylua
+
+                # shared dev env
+                self'.packages.devenv
               ];
             };
           };
 
           devenv = pkgs.buildEnv {
             name = "devenv";
-            paths = with pkgs; [
-              nurl
-            ];
+            paths = with pkgs; [nurl];
           };
         };
 
