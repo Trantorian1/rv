@@ -12,6 +12,7 @@ require("edgy").setup({
 		{ ft = "dapui_breakpoints" },
 		{ ft = "dapui_watches" },
 		{ ft = "dap-repl" },
+		{ ft = "OverseerList" },
 	},
 
 	right = {
@@ -22,10 +23,6 @@ require("edgy").setup({
 				return vim.bo[buf].buftype == "help"
 			end,
 		},
-	},
-
-	bottom = {
-		{ ft = "dap_disassembly" },
 	},
 
 	options = {

@@ -88,6 +88,9 @@
     no-neck-pain-nvim
     dropbar-nvim
     deadcolumn
+
+    # execution
+    overseer-nvim
   ];
 
   baseFonts = with pkgs; [
