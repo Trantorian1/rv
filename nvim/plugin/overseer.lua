@@ -22,22 +22,27 @@ overseer.add_template_hook({ name = "cargo doc" }, function(task_defn, util)
 end)
 
 overseer.add_template_hook({ name = "cargo run" }, function(task_defn, util)
+	util.remove_component(task_defn, "on_complete_notify")
 	util.add_component(task_defn, { "open_output", direction = "vertical", focus = true })
 end)
 
 overseer.add_template_hook({ name = "cargo test" }, function(task_defn, util)
+	util.remove_component(task_defn, "on_complete_notify")
 	util.add_component(task_defn, { "open_output", direction = "vertical", focus = true })
 end)
 
 overseer.add_template_hook({ name = "cargo bench" }, function(task_defn, util)
+	util.remove_component(task_defn, "on_complete_notify")
 	util.add_component(task_defn, { "open_output", direction = "vertical", focus = true })
 end)
 
 overseer.add_template_hook({ name = "cargo check" }, function(task_defn, util)
+	util.remove_component(task_defn, "on_complete_notify")
 	util.add_component(task_defn, { "open_output", direction = "vertical", focus = true })
 end)
 
 overseer.add_template_hook({ name = "cargo clippy" }, function(task_defn, util)
+	util.remove_component(task_defn, "on_complete_notify")
 	util.add_component(task_defn, { "open_output", direction = "vertical", focus = true })
 end)
 
@@ -46,5 +51,5 @@ vim.keymap.set("n", "<leader>eo", function()
 end, { desc = "[E]xecute [O]verview" })
 
 vim.keymap.set("n", "<leader>ee", function()
-	overseer.run_task()
+	overseer.run_task({})
 end, { desc = "[E]xecute in background" })

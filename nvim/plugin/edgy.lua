@@ -23,6 +23,8 @@ require("edgy").setup({
 				return vim.bo[buf].buftype == "help"
 			end,
 		},
+		{ ft = "OverseerOutput" },
+		{ ft = "snacks_terminal" },
 	},
 
 	bottom = {
@@ -31,7 +33,7 @@ require("edgy").setup({
 
 	options = {
 		left = { size = 50 },
-		right = { size = 90 },
+		right = { size = 0.5 },
 		bottom = { size = 15 },
 	},
 
