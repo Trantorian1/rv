@@ -25,6 +25,10 @@ require("edgy").setup({
 		},
 	},
 
+	bottom = {
+		{ ft = "qf" },
+	},
+
 	options = {
 		left = { size = 50 },
 		right = { size = 90 },
