@@ -13,12 +13,12 @@ local output_wins = {} -- [task_name] -> winid
 -- If the stored window was closed (e.g. user dismissed the panel), forget it
 -- so the next run opens a fresh one.
 local function get_reused_win(key)
-  local winid = output_wins[key]
-  if winid and vim.api.nvim_win_is_valid(winid) then
-    return winid
-  end
-  output_wins[key] = nil
-  return nil
+	local winid = output_wins[key]
+	if winid and vim.api.nvim_win_is_valid(winid) then
+		return winid
+	end
+	output_wins[key] = nil
+	return nil
 end
 
 ---@type overseer.ComponentFileDefinition
@@ -76,52 +76,42 @@ return {
 				-- window is reused, so re-run it now for this window. Fully
 				-- guarded so this is a no-op if edgy is unavailable or the window
 				-- was never an edgy panel.
-				local ok, edgy = pcall(require, "edgy")
-				if ok and edgy.get_win then
-					local edgy_win = edgy.get_win(winid)
-					if edgy_win then
-						local ok2, actions = pcall(require, "edgy.actions")
-						if ok2 and actions.setup then
-							-- Re-attach keymaps to the new buffer (guarded per-buffer).
-							actions.setup(edgy_win)
+				local edgy_win = require("edgy").get_win(winid)
+				if edgy_win then
+					-- Re-attach keymaps to the new buffer (guarded per-buffer).
+					require("edgy.actions").setup(edgy_win)
+
+					-- Re-establish the winbar/title and layout/size.
+					require("edgy.layout").update()
+
+					-- Edgy normally applies its window options (self.wo) when
+					-- it first claims a window (Edgy.Window.new). We reuse the
+					-- same Edgy.Window here, so that step is skipped and
+					-- window-local options -- notably `spell` (which is
+					-- window-local, so it can't be set per-buffer from the
+					-- OverseerOutput ftplugin) -- would be lost and revert to
+					-- the buffer/global default. Re-apply them now, mirroring
+					-- Window.new.
+					for opt, val in pairs(edgy_win.wo) do
+						if opt ~= "winhighlight" then
+							vim.api.nvim_set_option_value(opt, val, { scope = "local", win = winid })
 						end
-						local ok3, layout = pcall(require, "edgy.layout")
-						if ok3 and layout.update then
-							-- Re-establish the winbar/title and layout/size.
-							layout.update()
-						end
-						-- Edgy normally applies its window options (self.wo) when
-						-- it first claims a window (Edgy.Window.new). We reuse the
-						-- same Edgy.Window here, so that step is skipped and
-						-- window-local options -- notably `spell` (which is
-						-- window-local, so it can't be set per-buffer from the
-						-- OverseerOutput ftplugin) -- would be lost and revert to
-						-- the buffer/global default. Re-apply them now, mirroring
-						-- Window.new.
-						for opt, val in pairs(edgy_win.wo) do
-							if opt ~= "winhighlight" then
-								vim.api.nvim_set_option_value(opt, val, { scope = "local", win = winid })
-							end
-						end
-						if edgy_win.fix_winhl then
-							edgy_win:fix_winhl()
-						end
+					end
+					if edgy_win.fix_winhl then
+						edgy_win:fix_winhl()
 					end
 				end
 
-				local ok, util = pcall(require, "overseer.util")
+				local util = require("overseer.util")
+
 				-- A fresh panel gets window-local number=false,
 				-- relativenumber=false and signcolumn=no from overseer's
 				-- set_term_window_opts (called during open_output). Reuse
 				-- skips that, so the panel falls back to the global
 				-- number=true and shows line numbers. Re-apply them now so a
 				-- reused panel matches a fresh one.
-				if ok and util.set_term_window_opts then
-					util.set_term_window_opts(winid)
-				end
-				if ok and util.scroll_to_end then
-					util.scroll_to_end(winid)
-				end
+				util.set_term_window_opts(winid)
+				util.scroll_to_end(winid)
 			end
 
 			if winid then
@@ -131,8 +121,7 @@ return {
 
 		return {
 			on_complete = function(_self, task, status)
-				local trigger =
-					params.on_complete == "always"
+				local trigger = params.on_complete == "always"
 					or (params.on_complete == "success" and status == STATUS.SUCCESS)
 					or (params.on_complete == "failure" and status == STATUS.FAILURE)
 				if trigger then
