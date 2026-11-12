@@ -4,6 +4,21 @@
   lib,
   ...
 }: let
+  rustowl-src = pkgs.fetchFromGitHub {
+    owner = "cordx56";
+    repo = "rustowl";
+    rev = "61a893c0e1b8c25389b17593bcfedcfecc5d44fc";
+    hash = "sha256-1U9Jagwb0bBtS/tYDpNOrYo/IdjreCmj2BA8hYltRuE=";
+  };
+
+  rustowl = pkgs.callPackage ./rustowl.nix {inherit rustowl-src;};
+
+  rustowl-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "rustowl-nvim";
+    version = "${((lib.importTOML "${rustowl-src}/Cargo.toml").workspace.package).version}-unstable";
+    src = rustowl-src;
+  };
+
   deadcolumn = pkgs.vimUtils.buildVimPlugin {
     name = "deadcolumn-nvim";
     src = pkgs.fetchFromGitHub {
@@ -88,6 +103,7 @@
     no-neck-pain-nvim
     dropbar-nvim
     deadcolumn
+    rustowl-nvim
 
     # execution
     overseer-nvim
@@ -119,6 +135,7 @@
     graphviz
     taplo
     vscode-extensions.vadimcn.vscode-lldb.adapter
+    rustowl
 
     # json
     fixjson
