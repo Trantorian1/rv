@@ -68,6 +68,31 @@ return {
 				-- Subsequent runs: repoint the existing window to the new buffer.
 				-- Fresh buffer => clean output; single window => no edgy stacking.
 				vim.api.nvim_win_set_buf(winid, bufnr)
+
+				-- The swapped-in buffer is a brand-new object with no edgy
+				-- buffer-local keymaps (q, <c-q>, ]w/[w, resize, ...) and may have
+				-- lost the view title. Edgy only attaches these at claim time
+				-- (Window.new -> actions.setup), which does not re-run when a
+				-- window is reused, so re-run it now for this window. Fully
+				-- guarded so this is a no-op if edgy is unavailable or the window
+				-- was never an edgy panel.
+				local ok, edgy = pcall(require, "edgy")
+				if ok and edgy.get_win then
+					local edgy_win = edgy.get_win(winid)
+					if edgy_win then
+						local ok2, actions = pcall(require, "edgy.actions")
+						if ok2 and actions.setup then
+							-- Re-attach keymaps to the new buffer (guarded per-buffer).
+							actions.setup(edgy_win)
+						end
+						local ok3, layout = pcall(require, "edgy.layout")
+						if ok3 and layout.update then
+							-- Re-establish the winbar/title and layout/size.
+							layout.update()
+						end
+					end
+				end
+
 				local ok, util = pcall(require, "overseer.util")
 				if ok and util.scroll_to_end then
 					util.scroll_to_end(winid)
