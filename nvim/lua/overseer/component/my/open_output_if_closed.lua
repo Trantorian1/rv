@@ -90,10 +90,35 @@ return {
 							-- Re-establish the winbar/title and layout/size.
 							layout.update()
 						end
+						-- Edgy normally applies its window options (self.wo) when
+						-- it first claims a window (Edgy.Window.new). We reuse the
+						-- same Edgy.Window here, so that step is skipped and
+						-- window-local options -- notably `spell` (which is
+						-- window-local, so it can't be set per-buffer from the
+						-- OverseerOutput ftplugin) -- would be lost and revert to
+						-- the buffer/global default. Re-apply them now, mirroring
+						-- Window.new.
+						for opt, val in pairs(edgy_win.wo) do
+							if opt ~= "winhighlight" then
+								vim.api.nvim_set_option_value(opt, val, { scope = "local", win = winid })
+							end
+						end
+						if edgy_win.fix_winhl then
+							edgy_win:fix_winhl()
+						end
 					end
 				end
 
 				local ok, util = pcall(require, "overseer.util")
+				-- A fresh panel gets window-local number=false,
+				-- relativenumber=false and signcolumn=no from overseer's
+				-- set_term_window_opts (called during open_output). Reuse
+				-- skips that, so the panel falls back to the global
+				-- number=true and shows line numbers. Re-apply them now so a
+				-- reused panel matches a fresh one.
+				if ok and util.set_term_window_opts then
+					util.set_term_window_opts(winid)
+				end
 				if ok and util.scroll_to_end then
 					util.scroll_to_end(winid)
 				end
