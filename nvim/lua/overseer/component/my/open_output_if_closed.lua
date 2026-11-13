@@ -40,7 +40,7 @@ return {
 		focus = {
 			desc = "Focus the output window when it is opened",
 			type = "boolean",
-			default = true,
+			default = false,
 		},
 	},
 	constructor = function(params)
