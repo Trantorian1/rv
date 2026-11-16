@@ -21,6 +21,7 @@ overseer.setup({
 overseer.add_template_hook({ name = "cargo doc" }, function(task_defn, util)
 	util.remove_component(task_defn, "on_complete_notify")
 	util.remove_component(task_defn, "on_complete_dispose")
+	util.add_component(task_defn, { "my.open_output_if_closed", on_complete = "always", direction = "vertical" })
 end)
 
 overseer.add_template_hook({ name = "cargo run" }, function(task_defn, util)
