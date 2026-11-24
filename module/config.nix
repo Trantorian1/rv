@@ -14,6 +14,16 @@
     };
   };
 
+  scrollbar = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-scrollbar";
+    src = pkgs.fetchFromGitHub {
+      owner = "petertriho";
+      repo = "nvim-scrollbar";
+      tag = "v1.0.0";
+      hash = "sha256-g+gJp7noNdLKfvp+QbnTFE++PI3FcJG7reDenkg15k0=";
+    };
+  };
+
   basePlugins = with pkgs.vimPlugins; [
     # Common deps
     plenary-nvim
@@ -81,13 +91,13 @@
     render-markdown-nvim
     noice-nvim
     rainbow-delimiters-nvim
-    nvim-scrollbar
     edgy-nvim
     which-key-nvim
     smart-splits-nvim
     no-neck-pain-nvim
     dropbar-nvim
     deadcolumn
+    scrollbar
 
     # execution
     overseer-nvim
@@ -202,6 +212,7 @@ in {
         cp bin/neovide $out/bin/rv
         wrapProgram $out/bin/rv \
           --add-flag --neovim-bin=${config.rv.nvim}/bin/nvim \
+          --add-flag --no-startup-message-capture \
           --prefix XDG_DATA_DIRS : ${lib.makeSearchPath "share" (baseFonts ++ config.rv.fonts)}
 
         runHook postInstall
