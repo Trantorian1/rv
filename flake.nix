@@ -2,7 +2,7 @@
   description = "Graphical neovim configuration for Rust development";
 
   inputs = {
-    nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     opencode-sandbox.url = "github:OpencodeSandbox/opencode-sandbox?ref=feat/opencodev2";
